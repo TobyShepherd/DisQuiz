@@ -11,31 +11,40 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         NavigationView{
-            ZStack{
-            Color.cyan.ignoresSafeArea()
-            VStack{
+                ZStack{
+                    Image("star sky")
+                        .resizable()
+                        .frame(width: 400, height: 900)
+                        .offset(y: -50)
+                VStack{
+                
                 Image("logo 2")
-                    .offset(y: -150)
-                NavigationLink(destination: GameView(totalQuestions: 10, difficulty: "HARD"))
+                
+            NavigationLink(destination: GameView(totalQuestions: 10, difficulty: "HARD"))
             {
                 Text("Quick Play!")
-                    .foregroundColor(.black)
-                    .font(.largeTitle)
                     .padding(.all)
+                    .background(.green)
+                    .foregroundColor(.black)
+                    .cornerRadius(50)
+                    .font(.system(size: 50))
             }
             NavigationLink(destination: MenuView(menuTotalQuestions: 10, menuDifficulty: "MEDIUM", difficultyCounter: 2))
             {
                 Text("Set Up Game!")
-                    .foregroundColor(.black)
-                    .font(.largeTitle)
                     .padding(.all)
+                    .background(.green)
+                    .foregroundColor(.black)
+                    .cornerRadius(50)
+                    .font(.system(size: 50))
             }
             }
             .offset(y: -150)
             }
+            }
         }
 }
-}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -62,17 +71,20 @@ struct MenuView: View {
     @State var difficultyCounter: Int
     var body: some View {
         ZStack{
-        Color.cyan.ignoresSafeArea()
+            Image("star sky")
+                .resizable()
+                .frame(width: 400, height: 900)
+                .offset(y: -50)
             VStack{
                 Image("logo 2")
                 Text("Game Settings!")
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                     .font(.largeTitle)
                     .padding(.all)
                     .font(.system(size: 25))
                 VStack{
                     Text("Total Questions")
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .font(.largeTitle)
                         .padding(.all)
                 HStack{
@@ -111,7 +123,7 @@ struct MenuView: View {
                 
                 VStack{
                     Text("Difficulty")
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .font(.largeTitle)
                         .padding(.all)
                 HStack{
@@ -174,114 +186,157 @@ struct MenuView: View {
     }
 
 struct GameView: View {
-    @State private var actualNumber = 1
+    @State private var actualNumber = Int.random(in: 1...60)
     @State private var name: String = ""
     @State private var comparisonText = ""
     @State private var correctCount = 0
     @State private var incorrectCount = 0
-    @State private var chName = ""
     @State private var characterNumber = 0
+    @State private var gameActive = false
+    @State private var answered = false
     var totalQuestions: Int
     var difficulty: String
     @State var question = 0
     var body: some View {
         ZStack(alignment: .top){
-            Color.cyan.ignoresSafeArea()
-            ZStack{
+            Image("star sky")
+                .resizable()
+                .frame(width: 400, height: 900)
+                .offset(y: -50)
                 VStack{
                     Image("logo 2")
-                Text("Who am i?")
-                    .foregroundColor(.black)
+                VStack{
+                if(gameActive)
+                {
+                    Text("Who am I?")
+                    .foregroundColor(.white)
                     .font(.largeTitle)
                     .padding(.all)
+                }
                     VStack{
-        ForEach (characters) { character in
+            ForEach (characters) { character in
             let characterNumber = character.characterID
-            //chName = character.name
             if(characterNumber == actualNumber)
             {
-            CharacterImage(character: character)
-            }
-        }
-                        
-        TextField(name, text: $name)
-            .background(.white)
-            .padding(.all)
-                        
-        Button(action: {
-            if(question < totalQuestions)
-            {
-                if(name != "")
+                if(gameActive)
                 {
-                    question = question + 1
-                    if(name != "" && comparisonText == name)
+                    CharacterImage(character: character)
+                    
+                    TextField(name, text: $name)
+                        .background(.white)
+                        .padding(.all)
+                    
+                    if(!answered)
                     {
-                        correctCount = correctCount + 1
-                    }
-                    else
-                    {
-                        incorrectCount = incorrectCount + 1
-                    }
-                    if(difficulty == "EASY")
-                    {
-                        actualNumber = Int.random(in: 1...20)
-                    }
-                    else if (difficulty == "MEDIUM")
-                    {
-                        actualNumber = Int.random(in: 1...40)
-                    }
-                    else if (difficulty == "HARD")
-                    {
-                        actualNumber = Int.random(in: 1...60)
-                    }
-                    name = ""
+                    Button(action: {
+                        if(question < totalQuestions)
+                        {
+                            if(name != "")
+                            {
+                                question = question + 1
+                                if(name != "" && comparisonText == name)
+                                {
+                                    correctCount = correctCount + 1
+                                    print(comparisonText)
+                                }
+                                else
+                                {
+                                    incorrectCount = incorrectCount + 1
+                                }
+                                if(difficulty == "EASY")
+                                {
+                                    actualNumber = Int.random(in: 1...20)
+                                    comparisonText = character.name
+                                }
+                                else if (difficulty == "MEDIUM")
+                                {
+                                    actualNumber = Int.random(in: 1...40)
+                                    comparisonText = character.name
+                                }
+                                else if (difficulty == "HARD")
+                                {
+                                    
+                                    actualNumber = Int.random(in: 1...60)
+                                    comparisonText = character.name
+                                    print(comparisonText)
+                                }
+                                name = ""
+                                }
+                            }
+                        if (question == totalQuestions)
+                        {
+                            gameActive = false
+                        }
+                    }, label: {
+                        Text("Submit")
+                            .padding(.all)
+                            .background(.green)
+                            .foregroundColor(.black)
+                            .cornerRadius(50)
+                    })
                     }
                 }
-        }, label: {
-            Text("Submit")
-                .padding(.all)
-                .background(.green)
-                .foregroundColor(.black)
-                .cornerRadius(50)
-        })
-        if (question == totalQuestions)
-        {
-            NavigationLink(destination: ResultsView(correctAnswers: correctCount, incorrectAnswers: incorrectCount))
-            {
-                Text("Game Finished! Go To Results")
-                    .foregroundColor(.black)
-                    .font(.largeTitle)
-                    .padding(.all)
+                if (!gameActive && question < totalQuestions)
+                {
+                    Button(action: {
+                        comparisonText = character.name
+                        gameActive = true
+                    }, label: {
+                        if(!gameActive)
+                        {
+                            Text("Begin Round!")
+                                .padding(.all)
+                                .background(.green)
+                                .foregroundColor(.black)
+                                .cornerRadius(50)
+                        }
+                        if(!answered && gameActive)
+                        {
+                        Text("when does this appear")
+                            .padding(.all)
+                            .background(.green)
+                            .foregroundColor(.black)
+                            .cornerRadius(50)
+                        }
+                        if(answered && gameActive)
+                        {
+                            Text("Next Character!")
+                                .padding(.all)
+                                .background(.green)
+                                .foregroundColor(.black)
+                                .cornerRadius(50)
+                        }
+                })
+                }
             }
         }
-    }
-}
-}
-}
-}
-}
-
-struct ResultsView: View {
-    var correctAnswers: Int
-    var incorrectAnswers: Int
-    var body: some View {
-        ZStack{
-        Color.cyan.ignoresSafeArea()
-        VStack{
-            Image("logo 2")
-            let correctDisplay = "\(correctAnswers)"
-            let incorrectDisplay = "\(incorrectAnswers)"
+        if (question == totalQuestions)
+        {
+            let correctDisplay = "\(correctCount)"
+            let incorrectDisplay = "\(incorrectCount)"
             Text("Results!")
+                .font(.system(size: 35))
+                .foregroundColor(.white)
             Text("You answered " + correctDisplay + " correctly")
+                .font(.system(size: 30))
+                .foregroundColor(.white)
             Text("You answered " + incorrectDisplay + " incorrectly")
+                .foregroundColor(.white)
+                .font(.system(size: 30))
+            
             NavigationLink(destination: ContentView())
             {
                 Text("Play Again")
-                    .foregroundColor(.black)
-                    .font(.largeTitle)
                     .padding(.all)
+                    .background(.green)
+                    .foregroundColor(.black)
+                    .cornerRadius(50)
             }
         }
-        }
     }
+}
+                .offset(y: -50)
+}
+}
+}
 }
