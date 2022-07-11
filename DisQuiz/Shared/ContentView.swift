@@ -93,7 +93,6 @@ struct MenuView: View {
                         {
                         menuTotalQuestions = menuTotalQuestions - 5
                         }
-                        print(menuTotalQuestions)
                     }, label: {
                         Image("UIButtonLEFT")
                             .resizable()
@@ -112,7 +111,6 @@ struct MenuView: View {
                         {
                         menuTotalQuestions = menuTotalQuestions + 5
                         }
-                        print(menuTotalQuestions)
                     }, label: {
                         Image("UIButtonRIGHT")
                             .resizable()
@@ -138,8 +136,6 @@ struct MenuView: View {
                             difficultyCounter = 2
                             menuDifficulty = "MEDIUM"
                         }
-                        print(difficultyCounter)
-                        print(menuDifficulty)
                     }, label: {
                         Image("UIButtonLEFT")
                             .resizable()
@@ -162,8 +158,6 @@ struct MenuView: View {
                             difficultyCounter = 3
                             menuDifficulty = "HARD"
                         }
-                        print(difficultyCounter)
-                        print(menuDifficulty)
                     }, label: {
                         Image("UIButtonRIGHT")
                             .resizable()
@@ -194,6 +188,7 @@ struct GameView: View {
     @State private var characterNumber = 0
     @State private var gameActive = false
     @State private var answered = false
+    @State private var newNumber = false;
     var totalQuestions: Int
     var difficulty: String
     @State var question = 0
@@ -237,7 +232,6 @@ struct GameView: View {
                                 if(name != "" && comparisonText == name)
                                 {
                                     correctCount = correctCount + 1
-                                    print(comparisonText)
                                 }
                                 else
                                 {
@@ -258,7 +252,6 @@ struct GameView: View {
                                     
                                     actualNumber = Int.random(in: 1...60)
                                     comparisonText = character.name
-                                    print(comparisonText)
                                 }
                                 name = ""
                                 }
@@ -323,20 +316,16 @@ struct GameView: View {
             Text("You answered " + incorrectDisplay + " incorrectly")
                 .foregroundColor(.white)
                 .font(.system(size: 30))
-            
-            NavigationLink(destination: ContentView())
-            {
-                Text("Play Again")
-                    .padding(.all)
-                    .background(.green)
-                    .foregroundColor(.black)
-                    .cornerRadius(50)
+            Text("If you want to play again, click the back button!")
+                .padding(.all)
+                .background(.black)
+                .foregroundColor(.white)
+                .cornerRadius(50)
             }
         }
     }
 }
                 .offset(y: -50)
-}
 }
 }
 }
